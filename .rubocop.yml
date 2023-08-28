@@ -1,0 +1,8 @@
+# .rubocop.yml
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'app/models/application_record.rb'
+    - 'bin/bundle'
+    - 'app/mailers/**/*'
