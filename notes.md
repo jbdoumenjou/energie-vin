@@ -4,7 +4,7 @@ This is a work in progress document showing the thinking behind the project.
 
 ## Kind of project
 
-It's a webapp exposing API of wines searchable by prices and rates.
+It's a webapp exposing API of wines searchable by prices and ratings.
 A graphic user interface would be a plus.
 
 ## Competition
@@ -16,9 +16,9 @@ A graphic user interface would be a plus.
 ## User Stories
 
 * As an administrator, I can load data from an external source.
-* As a wine expert, I can manage my rates on wines.
+* As a wine expert, I can manage my ratings on wines.
 * As a user:
-  * I can search for wine based on a price interval and the average rate.
+  * I can search for wine based on a price interval and the average rating.
   * I can save my search and be notified when a wine matches my criteria.
   * I can check the price history of a wine to understand the trend.
 * As a developer:
@@ -39,21 +39,21 @@ The minimal data needed in the wine data source.
     * selling_site
     * price (€)
     * lastUpdate -> check if we need to keep a trace of the update
-* Expert notes
-  * note1
-  * note2
-* Average note (the average of all expert notes)
+* Expert ratings
+  * rating1
+  * rating2
+* Average rating (the average of all expert ratings)
 
-The wine must be searchable by note and price
+The wine must be searchable by ratings and price
 A search could be saved to revieved alert when a wine match the criteria.
 Search Model:
 * price interval (€)
-* average note
+* average rating
 
 We need to load a file or any source file to have the wine database.
 The only public call will be the wine search with two criteria.
 An administration API could be added later to manage known wines.
-A specific access may be created for the experts rates.
+A specific access may be created for the experts ratings.
 
 As we don't know the initial model the chances are that we have a list of data by selling_site,
 and may or may not have the date associated to those data :
@@ -86,6 +86,8 @@ Or a more complex one.
 [
   {
 	name: "my wine 1",
+	lower_price: 20.5,
+	highest_price: 21.5,
 	prices: [
   	{
     	selling_site: "selling_site 1",
@@ -95,12 +97,9 @@ Or a more complex one.
     	selling_site: "selling_site 2",
     	price: 21.5,
   	},
- 	 
 	],
-	lower_price: 20.5,
-	highest_price: 21.5,
-	averageRate: sum(rates)/len(rates)
-	rates: [
+	average_rating: sum(ratings)/len(ratings)
+	ratings: [
   	4.5,
   	5
 	]
@@ -141,10 +140,77 @@ I choose Minitest to keep it simple and use the default tool.
 However, moving to RSpec seems to be a good idea depending on the team habits and the size of the project.
 RSpec could be a better way of writing specifications through tests.
 
-### Initialize the project
+### Steps
 
 ```shell
 rails new energie-vin --api
+```
+
+
+name: "my wine 1",
+	lower_price: 20.5,
+	highest_price: 21.5,
+	prices: [
+  	{
+    	selling_site: "selling_site 1",
+    	price: 20.5,
+  	},
+  	{
+    	selling_site: "selling_site 2",
+    	price: 21.5,
+  	},
+	],
+	average_rating: sum(ratings)/len(ratings)
+	ratings: [
+  	4.5,
+  	5
+	]
+
+
+Let's generate a first basic model.
+
+```shell
+rails generate model Wine \
+name:string \
+lowest_price:decimal \
+highest_price:decimal \
+average_rating:decimal
+```
+
+I hesitated to use float for the notation but I prefer to keep decimal for the precision of the operations to calculate the average.
+
+Apply the model:
+```shell
+rails db:migrate
+```
+
+Add the Wine model validation by updating the model and adding unit tests.
+
+
+Generate the controller:
+
+```shell
+rails generate controller Api::V1::Wines
+```
+
+Update `config/routes.rb`:
+Update `app/controllers/api/v1/wines_controller.rb`.
+Create a sample data by editing `db/seeds.rb`.
+Add tests.
+
+Launch the tests
+```shell
+rails test
+```
+
+Launch the server
+```shell
+rails server
+```
+
+Test the API:
+```shell
+curl -X GET "http://localhost:3000/api/v1/wines?price_min=10&price_max=25"
 ```
 
 # Resources
