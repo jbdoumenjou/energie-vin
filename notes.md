@@ -213,10 +213,55 @@ Test the API:
 curl -X GET "http://localhost:3000/api/v1/wines?price_min=10&price_max=25"
 ```
 
+Create the rating model
+```shell
+rails generate model Rating value:decimal expert_id:integer wine:belongs_to
+```
+
+After updating model and controller, I had a lot of issue to write the tests.  
+I was confusing with the url helper.
+I thought I have to use `api_v1_wine_ratings_url` but thanks to ```rails routes | grep api```, I found that the correct helper is `ratings_api_v1_wine_url`.
+
+
+```shell
+curl -d '{"rating":{"value": 8,"wine": 1,"expert_id":1}}' -X POST "localhost:3000/api/v1/wines/1/ratings" | jq
+```
+```shell
+curl -X DELETE "http://localhost:3000/api/v1/wines/1/ratings/1"
+```
+
+
+# Improvments
+
+* Add GUI
+* API
+  * add a job to fetch wine data from external source
+  * history of prices
+  * notification on search
+  * add pagination on list
+  * user management
+    * authentication
+	* authorization
+  * token management
+* integrate a "real" database in production like Postgresql
+* observability
+  * add logs
+  * add metrics
+  * add tracing
+* test
+  * improve existing tests
+  * add integration tests
+  * migrate to rspec and generate test from openAPI spec
+  * add code cover
+* Add a documentation
+
 # Resources
 
 * [Rails getting started](https://guides.rubyonrails.org/getting_started.html)
 * [Create rails API App](https://guides.rubyonrails.org/api_app.html)
+* [Testing](https://guides.rubyonrails.org/testing.html)
 * https://github.com/rspec/rspec-rails
 * https://www.betterspecs.org/
+
+
 

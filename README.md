@@ -1,6 +1,7 @@
 # Energie Vin
 
-[![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop/rubocop)
+![Tests](https://github.com/jbdoumenjou/energie-vin/actions/workflows/test-unit.yaml/badge.svg)
+![Linting](https://github.com/jbdoumenjou/energie-vin/actions/workflows/lint.yaml/badge.svg)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/jbdoumenjou/energie-vin/blob/main/LICENSE.md)
 
 A search platform referencing wines sold on specialized sites.
@@ -29,6 +30,32 @@ Test the Wine API
 ```
 curl -X GET "http://localhost:3000/api/v1/wines?price_min=1&price_max=14" | jq
 ```
+## API
+
+Search a wine within a price range
+```shell
+curl -X GET "http://localhost:3000/api/v1/wines?price_min=1&price_max=14" | jq
+```
+
+Create a rating on a wine
+```shell
+curl -d '{"rating":{"value":8,"expert_id":1}}' -X POST "localhost:3000/api/v1/wines/1/ratings"
+```
+
+List ratings for a wine
+```shell
+curl -X GET "localhost:3000/api/v1/wines/1/ratings"
+```
+
+Update a rating for a wine
+```shell
+curl -d '{"rating":{"value":9}}' -X PUT "localhost:3000/api/v1/wines/1/ratings/3"
+```
+
+Delete a rating
+```shell
+curl -X DELETE "localhost:3000/api/v1/wines/1/ratings/3"
+```
 
 ## Deployment
 
@@ -51,5 +78,3 @@ curl -X GET "https://energie-vin-jbd.koyeb.app/api/v1/wines?price_min=1&price_ma
   }
 ]
 ```
- 
-

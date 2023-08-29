@@ -2,6 +2,9 @@
 
 # Represents a wine in the application.
 class Wine < ApplicationRecord
+  # Relations
+  has_many :ratings, dependent: :destroy
+
   # Validations
   validates :lowest_price, presence: true
   validates :highest_price, presence: true
@@ -11,4 +14,14 @@ class Wine < ApplicationRecord
   scope :price_max, ->(max) { where('lowest_price <= ?', max) if max.present? }
   scope :price_min, ->(min) { where('highest_price >= ?', min) if min.present? }
   scope :order_by_rating, -> { order(average_rating: :desc) }
+
+  # Calculates the average rating from all related ratings
+  def update_average_rating
+    self.average_rating = if ratings.count.zero?
+                            0
+                          else
+                            ratings.average(:value)
+                          end
+    save
+  end
 end

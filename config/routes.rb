@@ -8,7 +8,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :wines, only: [:index]
+      resources :wines, only: [:index] do
+        post 'ratings', on: :member, to: 'wines#create_rating'
+        get 'ratings', on: :member, to: 'wines#ratings'
+        put 'ratings/:rating_id', on: :member, to: 'wines#update_rating', as: :update_rating
+        delete 'ratings/:rating_id', on: :member, to: 'wines#destroy_rating', as: :delete_rating
+      end
     end
   end
 end

@@ -12,7 +12,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 20_230_828_102_145) do
+ActiveRecord::Schema[7.0].define(version: 20_230_829_080_420) do
+  create_table 'ratings', force: :cascade do |t|
+    t.decimal 'value'
+    t.integer 'expert_id'
+    t.integer 'wine_id', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['wine_id'], name: 'index_ratings_on_wine_id'
+  end
+
   create_table 'wines', force: :cascade do |t|
     t.string 'name'
     t.decimal 'lowest_price'
@@ -21,4 +30,6 @@ ActiveRecord::Schema[7.0].define(version: 20_230_828_102_145) do
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
   end
+
+  add_foreign_key 'ratings', 'wines'
 end
