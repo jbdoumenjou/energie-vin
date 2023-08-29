@@ -11,8 +11,8 @@ module Api
       # GET /api/v1/wines
       #
       # @param [Hash] query_params Optional query parameters.
-      # @option query_params [Float] :price_min Minimum wine price (optional).
-      # @option query_params [Float] :price_max Maximum wine price (optional).
+      # @option query_params [Decimal] :price_min Minimum wine price (optional).
+      # @option query_params [Decimal] :price_max Maximum wine price (optional).
       # @return [JSON] A JSON array of wines.
       # @status 200 OK - When the request is successful.
       #
@@ -55,7 +55,7 @@ module Api
       #
       # @param [Integer] id The ID of the wine for which to create a rating.
       # @param [Hash] rating_params The parameters for the rating.
-      # @option rating_params [Float] :value The rating value between 0 and 10.
+      # @option rating_params [Decimal] :value The rating value between 0 and 10.
       # @option rating_params [Integer] :user_id The ID of the expert user who is submitting the rating.
       # @return [JSON] A JSON representation of the created rating or error messages.
       # @status 201 Created - When the rating is successfully created.
