@@ -10,6 +10,7 @@ module Api
         @wine2 = wines(:two)
         @wine3 = wines(:three)
 
+        @rating1 = ratings(:one)
         @expected
       end
 
@@ -20,10 +21,8 @@ module Api
         wines = JSON.parse(response.body)
         assert_equal 3, wines.length
 
-        p wines
-
         assert_wine_equal(@wine3, wines[0])
-        # assert_wine_equal(@wine1, wines[1])
+        assert_wine_equal(@wine1, wines[1])
         assert_wine_equal(@wine2, wines[2])
       end
 
@@ -44,6 +43,71 @@ module Api
 
         wines = JSON.parse(response.body)
         assert_equal [], wines
+      end
+
+      test 'expert should be able to create rating for wine' do
+        wine = wines(:one)
+        rating_count = wine.ratings.count
+
+        post ratings_api_v1_wine_url(wine), params: { rating: { value: 8, expert_id: 42 } }
+        rating = JSON.parse(response.body)
+
+        assert_equal 42, rating['expert_id']
+        assert_equal 8.0, BigDecimal(rating['value'])
+
+        # checks that the wine has been updated with the right average rating
+        wine.reload
+
+        assert_equal rating_count + 1, wine.ratings.count
+        assert_equal 7, wine.average_rating
+      end
+
+      test 'rating creation should fail with invalid value' do
+        wine = wines(:one)
+        rating_count = wine.ratings.count
+        post ratings_api_v1_wine_url(wine), params: { rating: { value: -2, expert_id: 1 } }
+
+        assert_response :unprocessable_entity
+        assert_equal rating_count, wine.ratings.count
+      end
+
+      test 'should get ratings for a wine' do
+        # Create some ratings for the wine
+        rating1 = @wine3.ratings.create(value: 8, expert_id: 1)
+        rating2 = @wine3.ratings.create(value: 6, expert_id: 2)
+
+        get ratings_api_v1_wine_url(@wine3)
+        assert_response :success
+
+        ratings = JSON.parse(response.body)
+        assert_equal 2, ratings.length
+
+        assert_equal rating1.id, ratings[0]['id']
+        assert_equal rating2.id, ratings[1]['id']
+      end
+
+      test 'should return empty list if no ratings exist for a wine' do
+        get ratings_api_v1_wine_url(@wine3)
+        assert_response :success
+
+        ratings = JSON.parse(response.body)
+        assert_empty ratings
+      end
+
+      test 'should delete a rating for a wine' do
+        delete delete_rating_api_v1_wine_url(@wine1, @rating1)
+        assert_response :no_content
+
+        assert_nil Rating.find_by(id: @rating1.id)
+      end
+
+      test 'should update a rating for a wine' do
+        new_rating_value = 9
+        put update_rating_api_v1_wine_url(@wine1, @rating1), params: { rating: { value: new_rating_value } }
+        assert_response :success
+
+        @rating1.reload
+        assert_equal new_rating_value, @rating1.value
       end
 
       private
