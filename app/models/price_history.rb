@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Represents a wine price in the application.
-class Price < ApplicationRecord
+# Represents the wine price history.
+class PriceHistory < ApplicationRecord
   # Relation
   belongs_to :wine
 

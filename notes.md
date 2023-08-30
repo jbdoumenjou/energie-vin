@@ -246,6 +246,13 @@ rails db:migrate
 
 Add Price relation to the Wine model.
 
+Create a PriceHistory model.
+Price represent the current price and PriceHistory keep all prices creation/update.
+
+```shell
+rails generate model PriceHistory wine:belongs_to seller_site:string price:decimal
+```
+
 
 
 # Improvments

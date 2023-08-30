@@ -6,3 +6,6 @@ AllCops:
     - 'app/models/application_record.rb'
     - 'bin/bundle'
     - 'app/mailers/**/*'
+    - 'db/migrate/*'
+    - 'db/schema.rb'
+
