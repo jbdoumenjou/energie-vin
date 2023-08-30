@@ -2,7 +2,7 @@
 
 # Represents a rating in the application.
 class Rating < ApplicationRecord
-  # Relations
+  # Relation
   belongs_to :wine
 
   # Validation

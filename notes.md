@@ -231,6 +231,7 @@ curl -X DELETE "http://localhost:3000/api/v1/wines/1/ratings/1"
 
 Now, what could be an easy way to add prices ref for a wine?
 We have to create a Model Price that will store a Price for a wine with a seller_site and a timestamp to know the last update.
+One way of improvment is to have a reference to a Seller Model.
 
 Create Price model
 ```shell
@@ -243,6 +244,7 @@ Apply migration
 rails db:migrate
 ```
 
+Add Price relation to the Wine model.
 
 
 

@@ -4,6 +4,7 @@
 class Wine < ApplicationRecord
   # Relations
   has_many :ratings, dependent: :destroy
+  has_many :prices, dependent: :destroy
 
   # Validations
   validates :lowest_price, presence: true
