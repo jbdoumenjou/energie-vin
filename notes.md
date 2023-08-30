@@ -125,7 +125,6 @@ Price history
 A price is associated with a selling site and a timestamp.
 The price history is updated each time the wine database is updated.
 
-
 ## Documentation
 
 Having a documentation following [OpenAPI](https://www.openapis.org/) could be a good idea.
@@ -230,6 +229,22 @@ curl -d '{"rating":{"value": 8,"wine": 1,"expert_id":1}}' -X POST "localhost:300
 curl -X DELETE "http://localhost:3000/api/v1/wines/1/ratings/1"
 ```
 
+Now, what could be an easy way to add prices ref for a wine?
+We have to create a Model Price that will store a Price for a wine with a seller_site and a timestamp to know the last update.
+
+Create Price model
+```shell
+rails generate model Price wine:belongs_to seller_site:string price:decimal fetched_at:datetime
+```
+
+Apply migration
+
+```shell
+rails db:migrate
+```
+
+
+
 
 # Improvments
 
@@ -262,6 +277,7 @@ curl -X DELETE "http://localhost:3000/api/v1/wines/1/ratings/1"
 * [Testing](https://guides.rubyonrails.org/testing.html)
 * https://github.com/rspec/rspec-rails
 * https://www.betterspecs.org/
+* https://www.reddit.com/r/rails/
 
 
 
