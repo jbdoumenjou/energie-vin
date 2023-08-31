@@ -32,42 +32,8 @@ curl -X GET "http://localhost:3000/api/v1/wines?price_min=1&price_max=14" | jq
 ```
 ## API
 
-Search a wine within a price range
-```shell
-curl -X GET "http://localhost:3000/api/v1/wines?price_min=1&price_max=14" | jq
-```
-
-Create a rating on a wine
-```shell
-curl -d '{"rating":{"value":8,"expert_id":1}}' -X POST "localhost:3000/api/v1/wines/1/ratings"
-```
-
-List ratings for a wine
-```shell
-curl -X GET "localhost:3000/api/v1/wines/1/ratings"
-```
-
-Update a rating for a wine
-```shell
-curl -d '{"rating":{"value":9}}' -X PUT "localhost:3000/api/v1/wines/1/ratings/3"
-```
-
-Delete a rating
-```shell
-curl -X DELETE "localhost:3000/api/v1/wines/1/ratings/3"
-```
-
-Retrieves a list of prices for a specific wine.
-```shell
-curl -X GET "localhost:3000/api/v1/wines/1/prices"
-```
-
-Retrieves the price history for a specific wine.
-```shell
-curl -X GET "localhost:3000/api/v1/wines/1/price_history"
-```
-
-Creates a new price for a specific wine.
+The documentation of the API is available at the root URL: http://localhost:3000/
+The last version is available here: https://energie-vin-jbd.koyeb.app
 
 ## Deployment
 
