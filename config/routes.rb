@@ -13,6 +13,8 @@ Rails.application.routes.draw do
         get 'ratings', on: :member, to: 'wines#ratings'
         put 'ratings/:rating_id', on: :member, to: 'wines#update_rating', as: :update_rating
         delete 'ratings/:rating_id', on: :member, to: 'wines#destroy_rating', as: :delete_rating
+        resources :prices
+        get 'price_history', on: :member, to: 'wines#price_history'
       end
     end
   end

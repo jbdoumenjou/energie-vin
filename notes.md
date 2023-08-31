@@ -125,7 +125,6 @@ Price history
 A price is associated with a selling site and a timestamp.
 The price history is updated each time the wine database is updated.
 
-
 ## Documentation
 
 Having a documentation following [OpenAPI](https://www.openapis.org/) could be a good idea.
@@ -230,19 +229,61 @@ curl -d '{"rating":{"value": 8,"wine": 1,"expert_id":1}}' -X POST "localhost:300
 curl -X DELETE "http://localhost:3000/api/v1/wines/1/ratings/1"
 ```
 
+Now, what could be an easy way to add prices ref for a wine?
+We have to create a Model Price that will store a Price for a wine with a seller_site and a timestamp to know the last update.
+One way of improvment is to have a reference to a Seller Model.
+
+Create Price model
+```shell
+rails generate model Price wine:belongs_to seller_site:string price:decimal fetched_at:datetime
+```
+
+Apply migration
+
+```shell
+rails db:migrate
+```
+
+Add Price relation to the Wine model.
+
+Create a PriceHistory model.
+Price represent the current price and PriceHistory keep all prices creation/update.
+
+```shell
+rails generate model PriceHistory wine:belongs_to seller_site:string price:decimal
+```
+
+To keep it simple, lets create crud api to manage a price.
+each creation/update of a price should update the price accordingly,
+and fill the price history.
+
+generates the price controller
+```shell
+rails generate controller Api::V1::Prices
+```
+
+Now, each time a price is created/updated, the price is checked to update to wine.lowest_price and the wine.highest_price.
+It does not work for price destroy but could be an enhancement.
+The price modifications should happen during the data fetch, but I chose to add an API endpoint in the first step.
+Similarly, each price creation/update adds a new entry in the PriceHistory table.
+I chose to create another table because the live cycle of the current price and a "log" table are completely different. It would be easier to improve the behavior with this separate table.
+
 
 # Improvments
 
 * Add GUI
 * API
   * add a job to fetch wine data from external source
-  * history of prices
   * notification on search
   * add pagination on list
+  * Add openAPI specification
   * user management
     * authentication
 	* authorization
   * token management
+  * secure app
+	* check field use to search (strong parameter and validation)
+	* use app id instead of bdd ids
 * integrate a "real" database in production like Postgresql
 * observability
   * add logs
@@ -252,7 +293,7 @@ curl -X DELETE "http://localhost:3000/api/v1/wines/1/ratings/1"
   * improve existing tests
   * add integration tests
   * migrate to rspec and generate test from openAPI spec
-  * add code cover
+  * add code covering
 * Add a documentation
 
 # Resources
@@ -262,6 +303,7 @@ curl -X DELETE "http://localhost:3000/api/v1/wines/1/ratings/1"
 * [Testing](https://guides.rubyonrails.org/testing.html)
 * https://github.com/rspec/rspec-rails
 * https://www.betterspecs.org/
+* https://www.reddit.com/r/rails/
 
 
 

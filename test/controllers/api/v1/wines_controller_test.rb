@@ -110,6 +110,24 @@ module Api
         assert_equal new_rating_value, @rating1.value
       end
 
+      test 'should get price history for a wine' do
+        wine = wines(:one)
+        get price_history_api_v1_wine_url(wine)
+        assert_response :success
+
+        price_history_response = JSON.parse(response.body)
+        assert_equal wine.price_histories.count, price_history_response.length
+      end
+
+      test 'should get prices for a wine' do
+        wine = wines(:one)
+        get api_v1_wine_prices_url(wine)
+        assert_response :success
+
+        prices_response = JSON.parse(response.body)
+        assert_equal wine.prices.count, prices_response.length
+      end
+
       private
 
       def assert_wine_equal(expected_wine, actual_wine)

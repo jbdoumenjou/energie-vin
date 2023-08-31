@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  wine: one
+  seller_site: MyString
+  price: 9.99
+  fetched_at: 2023-08-30 10:55:55
+
+two:
+  wine: two
+  seller_site: MyString
+  price: 19.99
+  fetched_at: 2023-08-30 10:55:55

@@ -4,7 +4,7 @@ module Api
   module V1
     # Controller for managing wines through the API.
     class WinesController < ApplicationController
-      before_action :find_wine, only: %i[create_rating ratings destroy_rating update_rating]
+      before_action :find_wine, only: %i[create_rating ratings destroy_rating update_rating price_history]
 
       # Retrieves a list of wines based on optional price filters and orders them by rating.
       #
@@ -172,6 +172,34 @@ module Api
         else
           render json: @rating.errors, status: :unprocessable_entity
         end
+      end
+
+      # Retrieves the price history for a wine.
+      #
+      # GET /api/v1/wines/:id/price_history
+      #
+      # Params:
+      # - id (required): The ID of the wine.
+      #
+      # Response:
+      # - JSON array of price history records.
+      #
+      # Example Request:
+      #   GET /api/v1/wines/1/price_history
+      #
+      # Example Response:
+      #   HTTP/1.1 200 OK
+      #   [
+      #     { "id": 1, "seller_site": "www.example.wine.com", "price": 15.99, ... },
+      #     { "id": 2, "seller_site": "www.another.wine.com", "price": 12.99, ... },
+      #     ...
+      #   ]
+      #
+      # @return [void]
+      def price_history
+        @price_history = @wine.price_histories
+
+        render json: @price_history, status: :ok
       end
 
       private
