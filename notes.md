@@ -269,6 +269,12 @@ Similarly, each price creation/update adds a new entry in the PriceHistory table
 I chose to create another table because the live cycle of the current price and a "log" table are completely different. It would be easier to improve the behavior with this separate table.
 
 
+After adding curl examples and documentation, I think it is the good time to add the openAPI spec and a user friendly way to expose it.
+I used chatGPT to generate the specification from the controllers code.
+After some fails, I used the redocly command to generate the html from the spec and put it in the public directory.
+It seems to be the simplest first step to document the API with OpenAPI spec.
+
+
 # Improvments
 
 * Add GUI
@@ -276,7 +282,8 @@ I chose to create another table because the live cycle of the current price and 
   * add a job to fetch wine data from external source
   * notification on search
   * add pagination on list
-  * Add openAPI specification
+  * Enhance openAPI specification
+    * linting
   * user management
     * authentication
 	* authorization
