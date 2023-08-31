@@ -1,0 +1,312 @@
+openapi: 3.0.0
+info:
+  title: Wine API
+  version: 1.0.0
+paths:
+  /api/v1/wines:
+    get:
+      summary: Retrieve a list of wines
+      parameters:
+        - name: price_min
+          in: query
+          description: Minimum wine price
+          schema:
+            type: number
+        - name: price_max
+          in: query
+          description: Maximum wine price
+          schema:
+            type: number
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                - id: 1
+                  name: Red Wine
+                  # ... other attributes
+                - id: 2
+                  name: White Wine
+                  # ... other attributes
+
+  /api/v1/wines/{id}/ratings:
+    get:
+      summary: Retrieve a list of ratings for a wine
+      parameters:
+        - name: id
+          in: path
+          description: ID of the wine
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                - id: 1
+                  value: 5
+                  expert_id: 1
+                  # ... other attributes
+                - id: 2
+                  value: 7
+                  expert_id: 2
+                  # ... other attributes
+
+  /api/v1/wines/{id}/ratings/{rating_id}:
+    put:
+      summary: Update a rating for a wine
+      parameters:
+        - name: id
+          in: path
+          description: ID of the wine
+          required: true
+          schema:
+            type: integer
+        - name: rating_id
+          in: path
+          description: ID of the rating to be updated
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              rating:
+                value: 8
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                id: 3
+                value: 8
+                expert_id: 1
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a rating for a wine
+      parameters:
+        - name: id
+          in: path
+          description: ID of the wine
+          required: true
+          schema:
+            type: integer
+        - name: rating_id
+          in: path
+          description: ID of the rating to be deleted
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No Content
+
+  /api/v1/wines/{id}/price_history:
+    get:
+      summary: Retrieve the price history for a wine
+      parameters:
+        - name: id
+          in: path
+          description: ID of the wine
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                - id: 1
+                  seller_site: www.example.wine.com
+                  price: 15.99
+                  # ... other attributes
+                - id: 2
+                  seller_site: www.another.wine.com
+                  price: 12.99
+                  # ... other attributes
+                  
+  /api/v1/wines/{wine_id}/prices:
+    get:
+      summary: Retrieve a list of prices for a specific wine
+      tags:
+        - Prices
+      parameters:
+        - in: path
+          name: wine_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful response containing a list of prices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Price'
+    post:
+      summary: Create a new price for a specific wine
+      tags:
+        - Prices
+      parameters:
+        - in: path
+          name: wine_id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceCreate'
+      responses:
+        '201':
+          description: Price successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v1/wines/{wine_id}/prices/{id}:
+    get:
+      summary: Retrieve a specific price for a wine
+      tags:
+        - Prices
+      parameters:
+        - in: path
+          name: wine_id
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful response containing the requested price
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+    patch:
+      summary: Update an existing price for a specific wine
+      tags:
+        - Prices
+      parameters:
+        - in: path
+          name: wine_id
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceUpdate'
+      responses:
+        '200':
+          description: Price successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete an existing price for a specific wine
+      tags:
+        - Prices
+      parameters:
+        - in: path
+          name: wine_id
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: Price successfully deleted
+components:
+  schemas:
+    Price:
+      type: object
+      properties:
+        id:
+          type: integer
+        price:
+          type: number
+          format: double
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - price
+        - created_at
+        - updated_at
+
+    PriceCreate:
+      type: object
+      properties:
+        price:
+          type: number
+          format: double
+      required:
+        - price
+
+    PriceUpdate:
+      type: object
+      properties:
+        price:
+          type: number
+          format: double
+      required:
+        - price
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Description of the error.
+        details:
+          type: object
+          description: Additional details about the error.
