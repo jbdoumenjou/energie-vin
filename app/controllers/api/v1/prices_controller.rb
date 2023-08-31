@@ -67,6 +67,29 @@ module Api
         end
       end
 
+      # Retrieves a specific price for a wine.
+      #
+      # GET /api/v1/wines/:wine_id/prices/:id
+      #
+      # Params:
+      # - wine_id: The ID of the wine.
+      # - id: The ID of the price to retrieve.
+      #
+      # Response:
+      # - JSON representation of the requested price.
+      #
+      # Example Request:
+      #   GET /api/v1/wines/1/prices/3
+      #
+      # Example Response:
+      #   HTTP/1.1 200 OK
+      #   {
+      #     "id": 3,
+      #     "price": 20.0,
+      #     ...
+      #   }
+      #
+      # @return [void]
       def show
         @price = @wine.prices.find(params[:id])
         render json: @price, status: :ok
