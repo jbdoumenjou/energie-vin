@@ -10,22 +10,22 @@ module Api
         @price = prices(:one)
       end
 
-      # test 'should get index' do
-      #   get api_v1_wine_prices_url(@wine)
-      #   assert_response :success
+      test 'should get index' do
+        get api_v1_wine_prices_url(@wine)
+        assert_response :success
 
-      #   json_response = JSON.parse(response.body)
-      #   assert_equal 1, json_response.length
-      #   assert_equal @price.id, json_response[0]['id']
-      # end
+        json_response = JSON.parse(response.body)
+        assert_equal 1, json_response.length
+        assert_equal @price.id, json_response[0]['id']
+      end
 
-      # test 'should show price' do
-      #   get api_v1_wine_price_url(@wine, @price)
-      #   assert_response :success
+      test 'should show price' do
+        get api_v1_wine_price_url(@wine, @price)
+        assert_response :success
 
-      #   json_response = JSON.parse(response.body)
-      #   assert_equal @price.id, json_response['id']
-      # end
+        json_response = JSON.parse(response.body)
+        assert_equal @price.id, json_response['id']
+      end
 
       test 'should create price' do
         @wine3 = wines(:three)
