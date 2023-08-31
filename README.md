@@ -57,6 +57,18 @@ Delete a rating
 curl -X DELETE "localhost:3000/api/v1/wines/1/ratings/3"
 ```
 
+Retrieves a list of prices for a specific wine.
+```shell
+curl -X GET "localhost:3000/api/v1/wines/1/prices"
+```
+
+Retrieves the price history for a specific wine.
+```shell
+curl -X GET "localhost:3000/api/v1/wines/1/price_history"
+```
+
+Creates a new price for a specific wine.
+
 ## Deployment
 
 The main branch of this project is deployed via [Koyeb](https://www.koyeb.com/)

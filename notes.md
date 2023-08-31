@@ -253,6 +253,20 @@ Price represent the current price and PriceHistory keep all prices creation/upda
 rails generate model PriceHistory wine:belongs_to seller_site:string price:decimal
 ```
 
+To keep it simple, lets create crud api to manage a price.
+each creation/update of a price should update the price accordingly,
+and fill the price history.
+
+generates the price controller
+```shell
+rails generate controller Api::V1::Prices
+```
+
+Now, each time a price is created/updated, the price is checked to update to wine.lowest_price and the wine.highest_price.
+It does not work for price destroy but could be an enhancement.
+The price modifications should happen during the data fetch, but I chose to add an API endpoint in the first step.
+Similarly, each price creation/update adds a new entry in the PriceHistory table.
+I chose to create another table because the live cycle of the current price and a "log" table are completely different. It would be easier to improve the behavior with this separate table.
 
 
 # Improvments
@@ -260,13 +274,16 @@ rails generate model PriceHistory wine:belongs_to seller_site:string price:decim
 * Add GUI
 * API
   * add a job to fetch wine data from external source
-  * history of prices
   * notification on search
   * add pagination on list
+  * Add openAPI specification
   * user management
     * authentication
 	* authorization
   * token management
+  * secure app
+	* check field use to search (strong parameter and validation)
+	* use app id instead of bdd ids
 * integrate a "real" database in production like Postgresql
 * observability
   * add logs
@@ -276,7 +293,7 @@ rails generate model PriceHistory wine:belongs_to seller_site:string price:decim
   * improve existing tests
   * add integration tests
   * migrate to rspec and generate test from openAPI spec
-  * add code cover
+  * add code covering
 * Add a documentation
 
 # Resources
